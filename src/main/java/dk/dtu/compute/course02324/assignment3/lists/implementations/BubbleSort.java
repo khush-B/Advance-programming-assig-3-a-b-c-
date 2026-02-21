@@ -32,6 +32,19 @@ public class BubbleSort {
         int j = list.size();
         do {
             swapped = false;
+            for (int i = 0; i+1 < j; i++) {
+                // comparator is an interface with a method compare() that returns a negative integer, zero, or a positive integer as the first argument is less than, equal to, or greater than the second.
+                // if the first argument is greater than the second, we need to swap them
+                if (comp.compare(list.get(i), list.get(i+1)) > 0) {
+                    // swap elements at positions i-1 and i
+                    //  generic type T is used to store the elements of the list, so we need to use a temporary variable of type T to store one of the elements while we swap them
+                    T temp = list.get(i);
+                    list.set(i, list.get(i+1));
+                    list.set(i+1, temp);
+                    swapped = true;
+                }
+            }
+            j--; // after each pass, the largest element is bubbled to the end of the list, so we can reduce the number of comparisons in the next pass by reducing j
 
             // TODO implement BubbleSort here (Assignment 3b) based on the code
             //      from lectures adapted for the use of generic lists and

@@ -17,8 +17,11 @@ public class SortedArrayList<E extends Comparable<E>> extends ArrayList<E> imple
 
     @Override
     public boolean add(@NotNull E e) {
-        throw new UnsupportedOperationException("This operation is not yet implemented!");
         // TODO needs implementation (Assignment 3b)
+        // we need to find the index at which the element should be inserted, and then insert it at that index, shifting the elements to the right if necessary
+        int findIndex=findIndexToInsert(e);
+        // we called the parent class's add method to insert the element at the found index, and return the result of that method call
+        return super.add(findIndex, e);
     }
 
     /**
@@ -37,7 +40,13 @@ public class SortedArrayList<E extends Comparable<E>> extends ArrayList<E> imple
         // TODO implementing and using this method might help you with
         //      a simple implementation of the add(E e) method.
         //      (Assignment 3b)
-        return 0;
+        //Compareto method is used to compare the element e with the elements in the list, it returns a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object.
+        for(int i = 0; i< size(); i++){
+            if(get(i).compareTo(e) >= 0){
+                return i;
+            }
+        }
+        return size();
 
     }
 

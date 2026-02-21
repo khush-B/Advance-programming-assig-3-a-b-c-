@@ -171,8 +171,8 @@ public class ArrayList<E> implements List<E> {
 
     @Override
     public void sort(@NotNull Comparator<? super E> c) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException("This operation is not yet implemented!");
         // TODO needs implementation (Assignment 3b)
+        BubbleSort.sort(c,this);
 
     }
 

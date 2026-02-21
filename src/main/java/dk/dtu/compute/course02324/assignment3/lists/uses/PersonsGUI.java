@@ -33,6 +33,8 @@ public class PersonsGUI extends GridPane {
 
     private int weightCount = 1;
 
+    private Label errorLabel;
+
     /**
      * Constructor which sets up the GUI attached a list of persons.
      *
@@ -45,10 +47,20 @@ public class PersonsGUI extends GridPane {
         this.setVgap(5.0);
         this.setHgap(5.0);
 
+        // Error label
+        errorLabel= new Label("");
+        errorLabel.setStyle("-fx-text-fill: red;");
+        errorLabel.setWrapText(true);
+        this.add(errorLabel, 0, 1, 2, 1); //
+
         // text filed for user entering a name
         TextField field = new TextField();
         field.setPrefColumnCount(5);
         field.setText("name");
+
+        TextField weigthField = new TextField();
+        weigthField.setPrefColumnCount(5);
+        weigthField.setText("Weight");
 
         // TODO for all buttons installed below, the actions need to properly
         //      handle (catch) exceptions, and it would be nice if the GUI
@@ -61,10 +73,35 @@ public class PersonsGUI extends GridPane {
         Button addButton = new Button("Add");
         addButton.setOnAction(
                 e -> {
-                    Person person = new Person(field.getText(), weightCount++);
-                    persons.add(person);
-                    // makes sure that the GUI is updated accordingly
-                    update();
+                    try{
+                        errorLabel.setText("");
+                        String name = field.getText();
+                        double weight;
+
+                        if(weigthField.getText().isEmpty()){
+                            weight= weightCount++;
+                        }
+                        else{
+                            weight = Double.parseDouble(weigthField.getText());
+                        }
+
+                        Person person = new Person(field.getText(), weight);
+                        persons.add(person);
+                        // makes sure that the GUI is updated accordingly
+
+                        field.setText("");
+                        weigthField.setText("");
+                        update();
+                    }
+                    catch (NumberFormatException ex)
+                    {
+                        errorLabel.setText("Weight must be a valid number.");
+                    }
+                    catch (IllegalArgumentException ex)
+                    {
+                        errorLabel.setText(ex.getMessage());
+                    }
+
                 });
 
         Comparator<Person> comparator = new GenericComparator<>();
@@ -91,7 +128,8 @@ public class PersonsGUI extends GridPane {
 
         // combines the above elements into vertically arranged boxes
         // which are then added to the left column of the grid pane
-        VBox actionBox = new VBox(field, addButton, sortButton, clearButton);
+        VBox actionBox = new VBox(
+                new Label("Name:"),field,  new Label("Weight(kg):"), weigthField,addButton, sortButton, clearButton, new Label(""), errorLabel);
         actionBox.setSpacing(5.0);
         this.add(actionBox, 0, 0);
 
@@ -111,6 +149,7 @@ public class PersonsGUI extends GridPane {
         scrollPane.setMaxHeight(300);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
 
         // ... and adds these elements to the right-hand columns of
         // the grid pane

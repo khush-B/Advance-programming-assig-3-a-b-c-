@@ -22,9 +22,16 @@ public class Person implements Comparable<Person> {
         if (o == null) {
             throw new IllegalArgumentException("Argument of compareTo() must not be null");
         }
-
         // TODO this must be implemented properly according
-        throw new UnsupportedOperationException("This operation is not yet implemented");
+        //First compare by name
+        int Comparename= this.name.compareTo(o.name);
+        if(Comparename != 0){
+            return Comparename;
+        }
+
+        //If the name is the same, compare by weight
+        return Double.compare(this.weight, o.weight);
+
     }
 
     /**
@@ -53,21 +60,28 @@ public class Person implements Comparable<Person> {
      */
     @Override
     public boolean equals(Object o) {
-        return super.equals(o);
-
         // TODO this must be implemented in accordance with the compareTo() method!
-        //      See lectures for course 02324!
-        //      Also add JavaDocs for @param and @return !
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+
+        Person person = (Person) o;
+
+        if(Double.compare(person.weight, weight) != 0) return false;
+        return name.equals(person.name);
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
-
         // TODO this must be implemented note that hashcode needs to be consistent
         //      with equals (o1.equals(o1) implies o1.hashCode() == o2.hashCode())!
         //      See lectures for course 02324
         //      Also add JavaDocs should be added
+        int result;
+        long temp;
+        result= name.hashCode();
+        temp= Double.doubleToLongBits(weight);
+        result= 31*result + (int) (temp ^ (temp >>> 32));
+        return result;
     }
 
 
